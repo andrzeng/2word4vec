@@ -1,11 +1,21 @@
 
+  
+
 # 2word4vec
 
-This project replicates the results of Mikolov et al, 2013. Efficient Estimation of Word Representations in Vector Space\
+  
+
+This project replicates the results of Mikolov et al, 2013. *Efficient Estimation of Word Representations in Vector Space*
+
+  
 
 Instructions on running:
 
-Open up __main__.py and run using Python 3.8.7 (newer versions should work as well).
+  
+
+Open up \_\_main\_\_.py  using Python 3.8.7 (newer versions should work as well).
+
+  
 
   
 
@@ -13,10 +23,16 @@ Open up __main__.py and run using Python 3.8.7 (newer versions should work as we
 
   
 
+  
+
 - If you want to change the embedding dimension, change the second parameter in models.missingWordPredictor(3000, 10)
 
   
 
-Run __main__.py. You should see a file named "trained_embedding_weights.pt" appear in the same directory as __main__.py after training finishes.
+  
+
+Run \_\_main\_\_.py. You should see a file named "trained_embedding_weights.pt" appear in the same directory as \_\_main\_\_.py after training finishes.
+
+  
 
 To load this file, you must create an nn.Embedding objects with the same parameters as the one used in training.

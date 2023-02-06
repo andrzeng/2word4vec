@@ -58,8 +58,9 @@ if __name__ == '__main__':
             for word in line.split():
                 text_bible.append(word.translate(str.maketrans('','', string.punctuation)).lower())           
     bible_lookup_table = vocabulary.create_lookup_table(text_bible)
-
-
+    with open('bible_lookup_table.pkl', 'wb') as f:
+        pickle.dump(bible_lookup_table, f)
+    
     dataset = vocabulary.CorpusDataset("data/bible.txt", 7, bible_lookup_table)
     
     loader = DataLoader(dataset, batch_size=2, shuffle=True)
