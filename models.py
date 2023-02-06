@@ -13,20 +13,39 @@ import matplotlib.pyplot as plt
 import numpy as np
 import copy
 
-class Text_validator(nn.Module):
-    def __init__(self, embedding_dim, ngram_len, hidden_units, n_hidden_layers):
-        super().__init__()
+class missingWordPredictor(nn.Module):
+    def __init__(
+        self,
+        num_embeddings : int,
+        embedding_dim : int,
+        
+        phrase_len : int = 7
+    ):
+        super(missingWordPredictor, self).__init__()
+
+        self.num_embeddings = num_embeddings
         self.embedding_dim = embedding_dim
-        self.ngram_len = ngram_len
+        self.phrase_len = phrase_len
 
-        self.input_to_hidden1 = nn.Linear(in_features=ngram_len*embedding_dim,
-                                          out_features=hidden_units)
-        self.hidden_layer_stack = [nn.Linear(in_features=hidden_units, out_features=hidden_units) for _ in range(n_hidden_layers)]
+        self.embedding = nn.Embedding(num_embeddings=num_embeddings, embedding_dim=embedding_dim)
 
-        self.hidden_to_output = nn.Linear(in_features=hidden_units, out_features=1)
+        self.linear1 = nn.Linear(in_features=(phrase_len-1)*embedding_dim, out_features=100)
+        self.linear2 = nn.Linear(in_features=100, out_features=100)
+        self.linear3 = nn.Linear(in_features=100, out_features=embedding_dim)
 
-    def forward(self, word_embeddings):
-        X = self.input_to_hidden1(word_embeddings)
-        '''
-            Todo
-        '''
+    def forward(self, 
+    X : torch.LongTensor #LongTensor of lookup table indices corresponding to the 7 words in the phrase.
+    ):
+        X = torch.cat([X[:,:int((self.phrase_len-1)/2)], X[:,int((self.phrase_len+1)/2):]], dim=1) #Remove the middle item
+
+        X = self.embedding(X) #Convert indices into embedding tensors
+
+        X = self.linear1(X)
+        X = torch.relu(X)
+        X = self.linear2(X)
+        X = torch.relu(X)
+        X = self.linear3(X)
+
+        return X
+        
+
